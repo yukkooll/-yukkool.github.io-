@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="zh-CN" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>侯丰宇 - 个人主页</title>
+    <!-- Chart.js for skill radar chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf for PDF download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --bg-color: #f5f7fa;
+            --text-color: #333;
+            --sidebar-bg: #2c3e50;
+            --card-bg: white;
+            --border-color: rgba(255, 255, 255, 0.2);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --gradient-start: #3498db;
+            --gradient-end: #2c3e50;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #1a252f;
+            --secondary-color: #5dade2;
+            --bg-color: #0f0f23;
+            --text-color: #ecf0f1;
+            --sidebar-bg: #1a252f;
+            --card-bg: #16213e;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            --gradient-start: #5dade2;
+            --gradient-end: #1a252f;
+        }
+
+        [data-theme="ocean"] {
+            --primary-color: #0077b6;
+            --secondary-color: #00b4d8;
+            --accent-color: #90e0ef;
+            --bg-color: #e0f7fa;
+            --text-color: #023e8a;
+            --sidebar-bg: #0077b6;
+            --card-bg: white;
+            --border-color: rgba(255, 255, 255, 0.3);
+            --shadow: 0 10px 40px rgba(0, 119, 182, 0.2);
+            --gradient-start: #00b4d8;
+            --gradient-end: #0077b6;
+        }
+
+        [data-theme="forest"] {
+            --primary-color: #1b4332;
+            --secondary-color: #40916c;
+            --accent-color: #95d5b2;
+            --bg-color: #f0fdf4;
+            --text-color: #081c15;
+            --sidebar-bg: #1b4332;
+            --card-bg: white;
+            --border-color: rgba(255, 255, 255, 0.3);
+            --shadow: 0 10px 40px rgba(27, 67, 50, 0.2);
+            --gradient-start: #40916c;
+            --gradient-end: #1b4332;
+        }
+
+        [data-theme="sunset"] {
+            --primary-color: #6d2e46;
+            --secondary-color: #f4a261;
+            --accent-color: #e76f51;
+            --bg-color: #fff1e6;
+            --text-color: #4d192e;
+            --sidebar-bg: #6d2e46;
+            --card-bg: white;
+            --border-color: rgba(255, 255, 255, 0.3);
+            --shadow: 0 10px 40px rgba(109, 46, 70, 0.2);
+            --gradient-start: #f4a261;
+            --gradient-end: #6d2e46;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            transition: all 0.4s ease;
+            scroll-behavior: smooth;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .navbar,
+        [data-theme="ocean"] .navbar,
+        [data-theme="forest"] .navbar,
+        [data-theme="sunset"] .navbar {
+            background: rgba(22, 33, 62, 0.95);
+        }
+
+        .navbar.scrolled {
+            height: 60px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        /* 控制面板 */
+        .control-panel {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.15);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+
+        .control-btn.tooltip {
+            position: relative;
+        }
+
+        .control-btn.tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 55px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn.tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 主题选择器 */
+        .theme-dropdown {
+            position: absolute;
+            right: 55px;
+            top: 0;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        .theme-dropdown.show {
+            display: flex;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .theme-option:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .theme-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        /* 主容器 */
+        .main-wrapper {
+            padding-top: 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-image {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid var(--secondary-color);
+            box-shadow: var(--shadow);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Section 通用样式 */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title p {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+
+        /* 简历卡片 */
+        .resume-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* 左侧边栏 */
+        .sidebar {
+            width: 350px;
+            background: linear-gradient(180deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 50px 35px;
+        }
+
+        .sidebar h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .photo-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-section {
+            margin-top: 35px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 1rem;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-list {
+            list-style-type: none;
+        }
+
+        .info-list li {
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .info-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .info-list li i {
+            width: 22px;
+            text-align: center;
+        }
+
+        /* 社交媒体 */
+        .social-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: white;
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        /* 技能进度条 */
+        .skills-list {
+            list-style-type: none;
+        }
+
+        .skills-list li {
+            margin-bottom: 18px;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease;
+        }
+
+        .self-evaluation {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .self-evaluation p {
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        /* 右侧主内容 */
+        .main-content {
+            flex: 1;
+            padding: 50px 40px;
+            min-width: 400px;
+        }
+
+        .main-section {
+            margin-bottom: 45px;
+        }
+
+        .main-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--secondary-color);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* 时间轴样式 */
+        .timeline {
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--gradient-start), transparent);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            margin-bottom: 35px;
+            position: relative;
+            padding: 20px;
+            background: var(--bg-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.2);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -42px;
+            top: 25px;
+            width: 16px;
+            height: 16px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            border: 4px solid var(--card-bg);
+            box-shadow: 0 0 0 3px var(--secondary-color);
+        }
+
+        .timeline-item h4 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .timeline-item .date {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline-item ul {
+            list-style-type: none;
+            margin-top: 12px;
+        }
+
+        .timeline-item ul li {
+            margin-bottom: 8px;
+            padding-left: 22px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .timeline-item ul li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* 作品集 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .portfolio-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .portfolio-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .portfolio-content {
+            padding: 25px;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .portfolio-content p {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .portfolio-tag {
+            padding: 5px 12px;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .portfolio-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .portfolio-link {
+            padding: 8px 18px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-link:hover {
+            background: var(--primary-color);
+        }
+
+        /* 联系表单 */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: var(--bg-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+        }
+
+        .contact-item i {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .contact-item-text h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .contact-item-text p {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-form h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group textarea {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 25px rgba(52, 152, 219, 0.4);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 技能雷达图容器 */
+        .skills-chart-container {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--card-bg);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        footer p {
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        /* 加载动画 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(52, 152, 219, 0.2);
+            border-top-color: var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 滚动动画 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-card {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main-content {
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--card-bg);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-text h2 {
+                font-size: 1.2rem;
+            }
+
+            .hero-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .control-panel {
+                top: auto;
+                bottom: 100px;
+                right: 20px;
+                flex-direction: row;
+            }
+
+            .back-to-top {
+                bottom: 100px;
+                left: 20px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* 打印样式优化 */
+        @media print {
+            .navbar,
+            .control-panel,
+            .back-to-top,
+            .hero-section,
+            .portfolio-section,
+            .contact-section,
+            footer {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .main-wrapper {
+                padding-top: 0;
+            }
+
+            .container {
+                padding: 0;
+                margin: 0;
+            }
+
+            .resume-card {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand" onclick="scrollToTop()">
+            <i class="fas fa-user-graduate"></i> 侯丰宇
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero">首页</a></li>
+            <li><a href="#resume">简历</a></li>
+            <li><a href="#portfolio">作品集</a></li>
+            <li><a href="#contact">联系我</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- 控制面板 -->
+    <div class="control-panel">
+        <div class="control-btn tooltip" data-tooltip="切换主题" onclick="toggleThemeDropdown()">
+            <i class="fas fa-palette"></i>
+            <div class="theme-dropdown" id="themeDropdown">
+                <div class="theme-option" onclick="setTheme('light')">
+                    <div class="theme-color" style="background: linear-gradient(135deg, #3498db, #2c3e50);"></div>
+                    浅色
+                </div>
+                <div class="theme-option" onclick="setTheme('dark')">
+                    <div class="theme-color" style="background: linear-gradient(135deg, #5dade2, #1a252f);"></div>
+                    深色
+                </div>
+                <div class="theme-option" onclick="setTheme('ocean')">
+                    <div class="theme-color" style="background: linear-gradient(135deg, #00b4d8, #0077b6);"></div>
+                    海洋
+                </div>
+                <div class="theme-option" onclick="setTheme('forest')">
+                    <div class="theme-color" style="background: linear-gradient(135deg, #40916c, #1b4332);"></div>
+                    森林
+                </div>
+                <div class="theme-option" onclick="setTheme('sunset')">
+                    <div class="theme-color" style="background: linear-gradient(135deg, #f4a261, #6d2e46);"></div>
+                    日落
+                </div>
+            </div>
+        </div>
+        <button class="control-btn tooltip" data-tooltip="下载PDF" onclick="downloadPDF()">
+            <i class="fas fa-download"></i>
+        </button>
+        <button class="control-btn tooltip" data-tooltip="打印简历" onclick="window.print()">
+            <i class="fas fa-print"></i>
+        </button>
+        <button class="control-btn tooltip" data-tooltip="分享" onclick="shareResume()">
+            <i class="fas fa-share-alt"></i>
+        </button>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 主内容 -->
+    <div class="main-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero">
+            <div class="hero-content">
+                <div class="hero-image">
+                    <img src="https://cnb.cool/yuu.cem/yu/-/commit-assets/download/a1b72c8b83e87bedb8b144014e88b15de685aa04/eba1d9cfbfb62935e0d2d522fcdf68e6.jpg" alt="个人照片">
+                </div>
+                <div class="hero-text">
+                    <h1>你好，我是侯丰宇</h1>
+                    <h2>数据分析 · 前端开发</h2>
+                    <p>我是一名应用统计学专业的大学生，具有扎实的统计学基础和数据分析能力。热爱学习新技术，善于解决问题，对数据分析和前端开发充满热情。</p>
+                    <div class="hero-buttons">
+                        <a href="#resume" class="btn btn-primary">
+                            <i class="fas fa-file-alt"></i> 查看简历
+                        </a>
+                        <a href="#contact" class="btn btn-secondary">
+                            <i class="fas fa-envelope"></i> 联系我
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 简历部分 -->
+        <section class="section" id="resume">
+            <div class="container">
+                <div class="section-title fade-in-up">
+                    <h2><i class="fas fa-file-alt"></i> 个人简历</h2>
+                    <p>了解我的教育背景、工作经历和专业技能</p>
+                </div>
+                <div class="resume-card fade-in-up" id="resumeContent">
+                    <!-- 左侧边栏 -->
+                    <div class="sidebar">
+                        <h1>侯丰宇</h1>
+                        <h2>应用统计学 · 重庆理工大学</h2>
+                        
+                        <div class="photo-container">
+                            <img src="https://cnb.cool/yuu.cem/yu/-/commit-assets/download/a1b72c8b83e87bedb8b144014e88b15de685aa04/eba1d9cfbfb62935e0d2d522fcdf68e6.jpg" alt="个人照片">
+                        </div>
+
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-user"></i> 基本信息</h3>
+                            <ul class="info-list">
+                                <li><i class="fas fa-birthday-cake"></i> 年龄：21岁</li>
+                                <li><i class="fas fa-envelope"></i> houfengyu@example.com</li>
+                                <li><i class="fas fa-phone"></i> 138-0000-0000</li>
+                                <li><i class="fas fa-map-marker-alt"></i> 重庆市巴南区</li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-link"></i> 社交媒体</h3>
+                            <div class="social-links">
+                                <a href="#" class="social-link" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="social-link" title="微信"><i class="fab fa-weixin"></i></a>
+                                <a href="#" class="social-link" title="微博"><i class="fab fa-weibo"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-code"></i> 专业技能</h3>
+                            <ul class="skills-list">
+                                <li>
+                                    <div class="skill-name">
+                                        <span>统计学分析</span>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="85"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="skill-name">
+                                        <span>Python</span>
+                                        <span>80%</span>
+                                    </div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="80"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="skill-name">
+                                        <span>Excel/SQL</span>
+                                        <span>75%</span>
+                                    </div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="75"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="skill-name">
+                                        <span>HTML/CSS</span>
+                                        <span>70%</span>
+                                    </div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="70"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="skill-name">
+                                        <span>JavaScript</span>
+                                        <span>65%</span>
+                                    </div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" data-width="65"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-star"></i> 自我评价</h3>
+                            <div class="self-evaluation">
+                                <p>我是一名应用统计学专业的大学生，具有扎实的统计学基础和数据分析能力。我热爱学习新技术，善于解决问题，具有良好的团队合作精神和沟通能力。</p>
+                            </div>
+                        </div>
+
+                        <!-- 技能雷达图 -->
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-chart-radar"></i> 技能雷达图</h3>
+                            <div class="skills-chart-container">
+                                <canvas id="skillsRadarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧主内容 -->
+                    <div class="main-content">
+                        <div class="main-section">
+                            <h2><i class="fas fa-graduation-cap"></i> 教育背景</h2>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <h4>重庆理工大学 - 应用统计学</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2023年9月 - 2027年6月</div>
+                                    <p><strong>学历：</strong>本科 | <strong>GPA:</strong> 3.8/4.0</p>
+                                    <ul>
+                                        <li>主修课程：统计学原理、数据分析、概率论、回归分析、时间序列分析</li>
+                                        <li>获得校级优秀学生奖学金</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="main-section">
+                            <h2><i class="fas fa-briefcase"></i> 实践经历</h2>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <h4>校学生会宣传部</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2023年9月 - 2024年6月</div>
+                                    <ul>
+                                        <li>负责学生会活动的宣传工作，设计海报和宣传材料，管理微信公众号</li>
+                                        <li>参与组织了10+场校园活动，公众号关注人数增加30%</li>
+                                        <li>获得"优秀学生会干部"称号</li>
+                                    </ul>
+                                </div>
+                                <div class="timeline-item">
+                                    <h4>数据分析师实习生</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2024年7月 - 2024年8月</div>
+                                    <ul>
+                                        <li>在某科技公司实习，协助数据分析师处理和分析用户数据，制作数据报告</li>
+                                        <li>独立完成了一份用户行为分析报告，被部门采纳并应用于产品优化</li>
+                                        <li>学习并掌握了Python数据分析库（Pandas, NumPy, Matplotlib）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="main-section">
+                            <h2><i class="fas fa-project-diagram"></i> 项目经历</h2>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <h4>学生成绩数据分析系统</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2024年3月 - 2024年6月</div>
+                                    <ul>
+                                        <li>使用Python和Excel分析学生成绩数据，构建预测模型，生成可视化报告</li>
+                                        <li>应用统计学方法识别学生学习薄弱环节，提高教学针对性</li>
+                                        <li>项目获得校级优秀项目奖</li>
+                                    </ul>
+                                </div>
+                                <div class="timeline-item">
+                                    <h4>校园活动网站开发</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2023年10月 - 2024年1月</div>
+                                    <ul>
+                                        <li>使用HTML/CSS和JavaScript开发校园活动网站，实现活动发布、报名等功能</li>
+                                        <li>采用响应式设计，确保在不同设备上的良好显示效果</li>
+                                        <li>网站被学校社团使用，参与人数超过500人</li>
+                                    </ul>
+                                </div>
+                                <div class="timeline-item">
+                                    <h4>市场调研数据分析</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2024年7月 - 2024年8月</div>
+                                    <ul>
+                                        <li>参与企业市场调研项目，负责数据收集、清洗和分析，撰写分析报告</li>
+                                        <li>运用SPSS和Excel进行数据统计分析，生成可视化图表</li>
+                                        <li>为企业提供了有价值的市场洞察，被采纳为决策参考</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="main-section">
+                            <h2><i class="fas fa-trophy"></i> 获奖情况</h2>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <h4>全国大学生数学建模大赛三等奖</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2024年</div>
+                                    <ul>
+                                        <li>与团队合作完成数学建模题目，运用数学和统计方法解决实际问题</li>
+                                    </ul>
+                                </div>
+                                <div class="timeline-item">
+                                    <h4>校优秀学生奖学金</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2024年</div>
+                                    <ul>
+                                        <li>综合排名专业前10%，获得校级优秀学生奖学金</li>
+                                    </ul>
+                                </div>
+                                <div class="timeline-item">
+                                    <h4>校新生入学奖学金</h4>
+                                    <div class="date"><i class="fas fa-calendar-alt"></i> 2023年</div>
+                                    <ul>
+                                        <li>高考成绩优异，获得校新生入学奖学金</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 作品集 -->
+        <section class="section portfolio-section" id="portfolio">
+            <div class="container">
+                <div class="section-title fade-in-up">
+                    <h2><i class="fas fa-briefcase"></i> 作品集</h2>
+                    <p>精选项目展示</p>
+                </div>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item fade-in-up">
+                        <div class="portfolio-image">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>学生成绩数据分析系统</h3>
+                            <p>使用Python和Excel分析学生成绩数据，构建预测模型，生成可视化报告</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">Python</span>
+                                <span class="portfolio-tag">数据分析</span>
+                                <span class="portfolio-tag">Excel</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link"><i class="fas fa-eye"></i> 查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-item fade-in-up">
+                        <div class="portfolio-image">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>校园活动网站开发</h3>
+                            <p>使用HTML/CSS和JavaScript开发校园活动网站，实现活动发布、报名等功能</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">HTML/CSS</span>
+                                <span class="portfolio-tag">JavaScript</span>
+                                <span class="portfolio-tag">响应式设计</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link"><i class="fas fa-eye"></i> 查看详情</a>
+                                <a href="#" class="portfolio-link"><i class="fab fa-github"></i> 源码</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-item fade-in-up">
+                        <div class="portfolio-image">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>市场调研数据分析</h3>
+                            <p>参与企业市场调研项目，负责数据收集、清洗和分析，撰写分析报告</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">SPSS</span>
+                                <span class="portfolio-tag">数据统计</span>
+                                <span class="portfolio-tag">报告撰写</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link"><i class="fas fa-eye"></i> 查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系我 -->
+        <section class="section contact-section" id="contact">
+            <div class="container">
+                <div class="section-title fade-in-up">
+                    <h2><i class="fas fa-envelope"></i> 联系我</h2>
+                    <p>有任何问题或合作意向，欢迎随时联系我</p>
+                </div>
+                <div class="contact-container">
+                    <div class="contact-info fade-in-up">
+                        <h3>联系方式</h3>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-item-text">
+                                <h4>邮箱</h4>
+                                <p>houfengyu@example.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-item-text">
+                                <h4>电话</h4>
+                                <p>138-0000-0000</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-item-text">
+                                <h4>地址</h4>
+                                <p>重庆市巴南区</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-weixin"></i>
+                            <div class="contact-item-text">
+                                <h4>微信</h4>
+                                <p>扫码添加好友</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form fade-in-up">
+                        <h3>发送消息</h3>
+                        <form id="contactForm" onsubmit="submitForm(event)">
+                            <div class="form-group">
+                                <label>姓名</label>
+                                <input type="text" name="name" required placeholder="请输入您的姓名">
+                            </div>
+                            <div class="form-group">
+                                <label>邮箱</label>
+                                <input type="email" name="email" required placeholder="请输入您的邮箱">
+                            </div>
+                            <div class="form-group">
+                                <label>主题</label>
+                                <input type="text" name="subject" required placeholder="请输入消息主题">
+                            </div>
+                            <div class="form-group">
+                                <label>消息内容</label>
+                                <textarea name="message" required placeholder="请输入您想说的话..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-paper-plane"></i> 发送消息
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 侯丰宇. All rights reserved. | Made with <i class="fas fa-heart" style="color: #e74c3c;"></i> and <i class="fas fa-coffee"></i></p>
+    </footer>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 800);
+
+            initSkillsRadarChart();
+            initScrollAnimations();
+            initBackToTop();
+            initNavbarScroll();
+            animateSkillBars();
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme, false);
+            }
+        });
+
+        function initNavbarScroll() {
+            window.addEventListener('scroll', () => {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+
+        function toggleThemeDropdown() {
+            const dropdown = document.getElementById('themeDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function setTheme(theme, save = true) {
+            const html = document.getElementById('htmlRoot');
+            html.setAttribute('data-theme', theme);
+            
+            if (save) {
+                localStorage.setItem('theme', theme);
+            }
+            
+            document.getElementById('themeDropdown').classList.remove('show');
+            
+            if (window.skillsRadarChart) {
+                window.skillsRadarChart.destroy();
+            }
+            initSkillsRadarChart();
+        }
+
+        function initSkillsRadarChart() {
+            const ctx = document.getElementById('skillsRadarChart').getContext('2d');
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textColor = isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.2)';
+            
+            window.skillsRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['统计学分析', 'Python', 'Excel/SQL', 'HTML/CSS', 'JavaScript', '数据分析'],
+                    datasets: [{
+                        label: '技能水平',
+                        data: [85, 80, 75, 70, 65, 88],
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        borderColor: 'rgba(255, 255, 255, 0.9)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        pointBorderColor: '#3498db',
+                        pointHoverBackgroundColor: '#3498db',
+                        pointHoverBorderColor: 'rgba(255, 255, 255, 0.9)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
+                            },
+                            angleLines: {
+                                color: gridColor
+                            },
+                            pointLabels: {
+                                color: textColor,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.fade-in-up').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        function initBackToTop() {
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 400) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function animateSkillBars() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const skillBars = entry.target.querySelectorAll('.skill-progress');
+                        skillBars.forEach(bar => {
+                            const width = bar.getAttribute('data-width');
+                            setTimeout(() => {
+                                bar.style.width = width + '%';
+                            }, 200);
+                        });
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                observer.observe(sidebar);
+            }
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('resumeContent');
+            const opt = {
+                margin: 0,
+                filename: '侯丰宇-个人简历.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait'
+                }
+            };
+
+            const btn = document.querySelector('.control-btn[onclick="downloadPDF()"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalContent;
+            }).catch(err => {
+                console.error('PDF生成失败:', err);
+                btn.innerHTML = originalContent;
+                alert('PDF生成失败，请重试');
+            });
+        }
+
+        function shareResume() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '侯丰宇 - 个人简历',
+                    text: '查看侯丰宇的个人简历',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('链接已复制到剪贴板！');
+                }).catch(() => {
+                    alert('请手动复制当前页面链接');
+                });
+            }
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(form);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            const mailtoLink = `mailto:houfengyu@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`姓名: ${name}\n邮箱: ${email}\n\n${message}`)}`;
+            window.location.href = mailtoLink;
+            
+            alert('感谢您的留言！系统将打开您的邮件客户端。');
+            form.reset();
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('themeDropdown');
+            if (!e.target.closest('.control-btn')) {
+                dropdown.classList.remove('show');
+            }
+            const navLinks = document.getElementById('navLinks');
+            if (!e.target.closest('.navbar')) {
+                navLinks.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
